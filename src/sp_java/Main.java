@@ -4,8 +4,8 @@ import org.eclipse.jetty.client.api.ContentResponse;
 
 import com.google.gson.JsonObject;
 
-import http.HttpClientSample;
-import http.HttpServerSample;
+import sp_java.http.HttpClientSample;
+import sp_java.http.HttpServerSample;
 import sp_java.json.JsonWrapper;
 import sp_java.json.Lesson;
 
