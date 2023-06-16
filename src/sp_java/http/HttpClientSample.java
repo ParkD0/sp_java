@@ -6,6 +6,7 @@ import org.eclipse.jetty.client.HttpClient;
 import org.eclipse.jetty.client.api.ContentResponse;
 import org.eclipse.jetty.client.api.Request;
 import org.eclipse.jetty.client.util.StringContentProvider;
+import org.eclipse.jetty.http.HttpHeader;
 import org.eclipse.jetty.http.HttpMethod;
 
 public class HttpClientSample {
@@ -56,7 +57,6 @@ public class HttpClientSample {
 			Request req = httpClient.newRequest(url).method(HttpMethod.POST);
 			
 			if(headerMap != null) {
-				req.header("abc", "abc");
 				headerMap.forEach((key, value)->{
 					req.header(key, value);
 				});

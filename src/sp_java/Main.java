@@ -1,5 +1,7 @@
 package sp_java;
 
+import java.util.HashMap;
+
 import org.eclipse.jetty.client.api.ContentResponse;
 
 import com.google.gson.JsonObject;
@@ -16,6 +18,8 @@ public class Main {
 		svr.run();
 		System.out.println("start server done");
 		
+		HashMap<String, String> hash = new HashMap<String, String>();
+		hash.put("Content-Type", "application/json");
 		ContentResponse res = HttpClientSample.doGet("http://127.0.0.1:8080/LESSON");
 		HttpClientSample.printRes(res);
 		
@@ -25,7 +29,6 @@ public class Main {
 		JsonObject lessonJson = jsonObj.get("Lesson").getAsJsonObject();
 		Lesson lesson = jw.jsonObjToObj(lessonJson);
 		System.out.println(lesson);
-		
 		svr.quit();
 	}
 }

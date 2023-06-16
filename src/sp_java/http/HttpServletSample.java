@@ -3,6 +3,7 @@ package sp_java.http;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Enumeration;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -52,40 +53,55 @@ public class HttpServletSample  extends HttpServlet {
 	
 	protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 		//System.out.println("Request : "+ req.getRequestURL());
-		
-		Gson gson = new Gson();
-		JsonObject resJson = new JsonObject();
-		
-		///////////////////////////////////////////////////////////////////////////////////////////////
-		///read body
-        BufferedReader input = new BufferedReader(new InputStreamReader(req.getInputStream()));
-        String buffer;
-        StringBuilder sb = new StringBuilder();
-        while ((buffer = input.readLine()) != null) {
-        	sb.append(buffer + "\n");
-        }
-        input.close();
-        String strBody = sb.toString();
-		
-		JsonObject jsonBody = gson.fromJson(strBody, JsonObject.class);
-		String managerId = jsonBody.get("ManagerID").getAsString();
-		///////////////////////////////////////////////////////////////////////////////////////////////
-		
 		String [] words = req.getPathInfo().toString().split("/"); 
 		String command = words[1];
 		
-		switch(command) {
-		case "FINISH":
-			resJson.addProperty("Result", "Ok");
-			break;
-		case "FAIL":
-			resJson.addProperty("Result", "Ok");
-			break;
-		}		
+		if(command.equals("LESSON")) {
+			Gson gson = new Gson();
+			JsonObject resJson = new JsonObject();
+			
+			///////////////////////////////////////////////////////////////////////////////////////////////
+			///read header
+			Enumeration<String> headers = req.getHeaderNames();
+			if(headers != null) {
+				while(headers.hasMoreElements()) {
+					System.out.println(headers.nextElement());
+				}
+			}
+			///////////////////////////////////////////////////////////////////////////////////////////////
+			
+ 			///////////////////////////////////////////////////////////////////////////////////////////////
+			///read body
+	        BufferedReader input = new BufferedReader(new InputStreamReader(req.getInputStream()));
+	        String buffer;
+	        StringBuilder sb = new StringBuilder();
+	        while ((buffer = input.readLine()) != null) {
+	        	sb.append(buffer + "\n");
+	        }
+	        input.close();
+	        String strBody = sb.toString();
+			
+			JsonObject jsonBody = gson.fromJson(strBody, JsonObject.class);
+			String managerId = jsonBody.get("ManagerID").getAsString();
+			///////////////////////////////////////////////////////////////////////////////////////////////
+			
+			String command2 = words[2];
+			
+			switch(command2) {
+			case "FINISH":
+				resJson.addProperty("Result", "Ok");
+				break;
+			case "FAIL":
+				resJson.addProperty("Result", "Ok");
+				break;
+			}
+			
+			res.getWriter().print(resJson.toString());
+			res.getWriter().flush();
+		}
 		
 		res.setStatus(200);
 		res.setContentType("application/json");
-		res.getWriter().print(resJson.toString());
-		res.getWriter().flush();
+		
 	}
 }
