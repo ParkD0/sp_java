@@ -1,6 +1,8 @@
 
 
 ## reference
+ai
+https://blog.mnc.ai/category/AI%20Study?page=2
 
 ### json
 https://hianna.tistory.com/629  
