@@ -27,6 +27,10 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.Base64.Decoder;
 import java.util.Base64.Encoder;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.List;
+import java.util.ArrayList;
 
 public class SpUtils {
 	
@@ -240,4 +244,65 @@ public class SpUtils {
 		psout.read(buffer);
 		return (new String(buffer));
 	}
+
+    //////////////////////////////////////////////////////////
+    //LinkedHashMap 입력순서대로 저장됨
+    //https://vanillacreamdonut.tistory.com/328#TreeSet%20%EC%9D%B4%EC%9A%A9%ED%95%98%EA%B8%B0-1
+    //https://velog.io/@dev-easy/Java-Map%EC%9D%84-Key-Value%EB%A1%9C-%EC%A0%95%EB%A0%AC%ED%95%98%EA%B8%B0
+    //////////////////////////////////////////////////////////
+    public static void MapSortExample() {
+        Map<String, Employee> result = map.entrySet()
+          .stream()
+          .sorted(Map.Entry.comparingByValue())
+          //.sorted(Map.Entry.<String, Employee>comparingByKey())
+          .collect(Collectors.toMap(
+            Map.Entry::getKey,
+            Map.Entry::getValue,
+            (a, b) -> { throw new AssertionError(); },
+                        LinkedHashMap::new
+          ));
+    }
+
+    public static void MapSortKey() {
+        List<String> keyList = new ArrayList<>(map.keySet());
+        Collections.sort(keyList);//오름차순
+        //Collections.reverse(keyList);//내림차순
+
+        Map<String, Integer> sortedMap = new HashMap<>();
+
+        for (String key: keyList) {
+            sortedMap.put(key, map.get(key));
+        }
+
+        
+    }
+
+    public static void MapSortValue() {
+        List<String> keyList = new ArrayList<>(map.keySet());
+        keyList.sort(new Comparator<String>() { //오름차순
+            @Override
+            public int compare(String o1, String o2) {
+                return map.get(o1).compareTo(map.get(o2));
+            }
+        });
+
+        Map<String, Integer> sortedMap = new HashMap<>();
+        for (String key: keyList) {
+            sortedMap.put(key, map.get(key));
+        }
+
+        keyList.sort( (o1, o2) -> map.get(o2).compareTo(map.get(o1)) ); //내림차순 람다
+        Map<String, Integer> sortedMap2 = new HashMap<>();
+        for (String key: keyList) {
+            sortedMap2.put(key, map.get(key));
+        }
+        
+    }
+
+
+    ////////////////////////////////
+    //비동기
+    //////////////////////////////
+    //https://velog.io/@wwlee94/%EC%9E%90%EB%B0%94%EC%9D%98-%EB%B9%84%EB%8F%99%EA%B8%B0-%EC%B2%98%EB%A6%AC-%EA%B8%B0%EC%88%A0
+
 }
